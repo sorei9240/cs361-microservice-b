@@ -1,0 +1,42 @@
+{
+  "new-1_小学生": {
+    "cardId": "new-1_小学生",
+    "streak": 2,
+    "lastReviewed": "2025-06-04T22:20:40.113Z",
+    "nextReviewDate": "2025-06-11T22:20:40.113Z",
+    "totalReviews": 2,
+    "correctReviews": 2
+  },
+  "new-1_爱": {
+    "cardId": "new-1_爱",
+    "streak": 2,
+    "lastReviewed": "2025-06-04T22:22:02.590Z",
+    "nextReviewDate": "2025-06-11T22:22:02.590Z",
+    "totalReviews": 2,
+    "correctReviews": 2
+  },
+  "new-1_进来": {
+    "cardId": "new-1_进来",
+    "streak": 0,
+    "lastReviewed": "2025-06-04T22:22:12.315Z",
+    "nextReviewDate": "2025-06-05T22:22:12.315Z",
+    "totalReviews": 2,
+    "correctReviews": 0
+  },
+  "new-1_半年": {
+    "cardId": "new-1_半年",
+    "streak": 2,
+    "lastReviewed": "2025-06-04T22:22:16.977Z",
+    "nextReviewDate": "2025-06-11T22:22:16.977Z",
+    "totalReviews": 2,
+    "correctReviews": 2
+  },
+  "new-1_来": {
+    "cardId": "new-1_来",
+    "streak": 2,
+    "lastReviewed": "2025-06-04T22:22:20.949Z",
+    "nextReviewDate": "2025-06-11T22:22:20.949Z",
+    "totalReviews": 2,
+    "correctReviews": 2
+  }
+}

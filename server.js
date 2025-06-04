@@ -1,6 +1,3 @@
-// microservice-b/server.js
-// Review Management Service - Handles flashcard grading and progress tracking
-
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs').promises;
@@ -13,7 +10,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// In-memory storage for card progress (in production, use a database)
+// In-memory storage for card progress 
 let cardProgress = new Map();
 
 // Load existing progress data on startup
@@ -90,7 +87,7 @@ app.get('/health', (req, res) => {
 });
 
 // Grade a flashcard (User Story 1)
-app.post('/grade', (req, res) => {
+app.post('/grade', async (req, res) => {
   const startTime = Date.now();
   
   try {
@@ -121,7 +118,7 @@ app.post('/grade', (req, res) => {
     
     // Save updated progress
     cardProgress.set(cardId, progress);
-    saveProgress(); // Async save (fire and forget for performance)
+    saveProgress(); 
     
     const responseTime = Date.now() - startTime;
     
@@ -141,7 +138,7 @@ app.post('/grade', (req, res) => {
 });
 
 // Reset a card's progress (User Story 2)
-app.post('/reset', (req, res) => {
+app.post('/reset', async (req, res) => {
   try {
     const { cardId } = req.body;
     
@@ -200,7 +197,7 @@ app.get('/progress/:cardId', (req, res) => {
   }
 });
 
-// Get cards due for review
+// Get cards due for review 
 app.get('/due', (req, res) => {
   try {
     const now = new Date();
@@ -234,7 +231,46 @@ app.get('/due', (req, res) => {
   }
 });
 
-// Get all progress data (for debugging/admin)
+// Get due cards for a specific deck/level
+app.get('/due/:deckId', (req, res) => {
+  try {
+    const { deckId } = req.params;
+    const now = new Date();
+    const dueCards = [];
+    
+    for (const [cardId, progress] of cardProgress) {
+      // Check if card belongs to the requested deck
+      if (cardId.startsWith(deckId + '_')) {
+        const dueDate = new Date(progress.nextReviewDate);
+        if (dueDate <= now) {
+          dueCards.push({
+            cardId,
+            ...progress,
+            overdueDays: Math.floor((now - dueDate) / (1000 * 60 * 60 * 24))
+          });
+        }
+      }
+    }
+    
+    // Sort by due date (most overdue first)
+    dueCards.sort((a, b) => new Date(a.nextReviewDate) - new Date(b.nextReviewDate));
+    
+    res.json({
+      success: true,
+      deckId,
+      dueCards,
+      count: dueCards.length
+    });
+    
+  } catch (error) {
+    console.error('Error getting due cards for deck:', error);
+    res.status(500).json({
+      error: 'Internal server error while getting due cards for deck'
+    });
+  }
+});
+
+// Get all progress data
 app.get('/all-progress', (req, res) => {
   try {
     const allProgress = Object.fromEntries(cardProgress);
@@ -270,6 +306,7 @@ app.use('*', (req, res) => {
       'POST /reset',
       'GET /progress/:cardId',
       'GET /due',
+      'GET /due/:deckId',
       'GET /all-progress'
     ]
   });
